@@ -8,7 +8,6 @@
     section {
         width: 100%;
         margin: 10px;
-        border: 1px solid black;
         border-radius: 6px;
         padding: 5px;
     }
@@ -18,15 +17,29 @@
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        height: 15%;
+        height: 12%;
+        font-size: 1.5rem;
 
         .filters {
             height: 100%;
             width: 80%;
+            background: white;
+            border-radius: 6px;
+            padding: 0 30px;
+
+            .filters-title {
+                width: 100%;
+                border-bottom: 1px solid #9c9c9c;
+                margin: 10px 0;
+            }
 
             .filters-inputs {
                 display: flex;
                 justify-content: space-between;
+
+                input {
+                    font-size: 20px;
+                }
             }
         }
 
@@ -39,25 +52,189 @@
     }
 
     .vehicles-info {
-        height: 75%;
+        height: 80%;
+        font-size: larger;
+        background: white;
+
+
+        .vehicles-table {
+            height: 90%;
+            border-radius: 6px;
+
+            table {
+                border: 1px solid black;
+                border-collapse: collapse;
+                background: white;
+                width: 100%;
+
+                th,
+                td {
+                    border: 1px solid #9c9c9c;
+                    text-align: center;
+
+                    svg {
+                        cursor: pointer;
+                    }
+                }
+
+                tr:nth-child(even) {
+                    background-color: #dddddd;
+                }
+
+                .vehicle-rows {
+                    max-height: 50px;
+                }
+            }
+        }
+
+    }
+}
+
+.add-vehicle-window {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    background: #eeeeee;
+    width: 40%;
+    height: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 6px;
+
+    h1 {
+        margin-left: 20px;
+    }
+
+    .add-vehicle-form {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 70%;
+
+        .vehicle-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            width: 49%;
+            height: 20%;
+            justify-content: center;
+
+            p {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+                font-size: larger;
+            }
+
+            input {
+                font-size: medium;
+            }
+        }
+    }
+
+    .add-buttons {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        height: 10%;
+
+        button {
+            font-size: large;
+            border-radius: 6px;
+            cursor: pointer;
+
+            &:nth-child(1) {
+                background: rgb(255, 146, 146);
+            }
+
+            &:nth-child(2) {
+                background: aquamarine;
+            }
+        }
+    }
+}
+
+.add-color-window {
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    background: #eeeeee;
+    width: 40%;
+    height: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+    border-radius: 6px;
+
+    h1 {
+        margin-left: 20px;
+    }
+
+    .add-color-form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        width: 100%;
+        height: 10%;
+
+        .color-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            width: 20%;
+            justify-content: center;
+
+            p {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+                font-size: larger;
+            }
+
+            input {
+                font-size: medium;
+            }
+
+            button {
+                width: 50px;
+                height: 50px;
+                background: rgb(146, 223, 156);
+                border: 0;
+                border-radius: 6px;
+                box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .colors-info {
+        width: 100%;
+        height: 60%;
+        border-top: 1px solid #9c9c9c;
 
         table {
-            border: 1px solid black;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 6px;
             width: 100%;
-            height: 90%;
+            text-align: center;
 
             th,
             td {
-                border: 1px solid #9c9c9c;
-                text-align: center;
+                svg {
+                    cursor: pointer;
+                }
             }
+        }
+    }
 
-            tr:nth-child(even) {
-                background-color: #dddddd;
-            }
+    .add-buttons {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        height: 10%;
+
+        button {
+            font-size: large;
+            border-radius: 6px;
+            cursor: pointer;
+            background: rgb(127, 214, 255);
         }
     }
 }

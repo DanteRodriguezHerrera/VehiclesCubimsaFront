@@ -2,7 +2,7 @@
 
     <section class="actions">
         <div class="filters">
-            <div style="width: 100%;">
+            <div class="filters-title">
                 Filtros
             </div>
             <div class="filters-inputs">
@@ -29,50 +29,251 @@
             </div>
         </div>
 
-        <button>
-            Nuevo <br>
+        <button (click)="showVehicleModal()">
+            Agregar <br>
             vehículo
         </button>
         <button>PDF</button>
     </section>
 
     <section class="vehicles-info">
-        Tabla de datos de vehículos
-        <table>
-            <tr>
-                <th>Modelo</th>
-                <th>Año</th>
-                <th>Color</th>
-                <th>Costo</th>
-                <th>Motor</th>
-                <th>Puertas</th>
-            </tr>
-            @for (item of [1,2,3,4,5,6,7,8,9]; track $index) {
-            <tr>
-                <td>Chevrolet</td>
-                <td>2015</td>
-                <td>Azul</td>
-                <td>100,000</td>
-                <td>2L 4 Cil</td>
-                <td>4</td>
-                <td>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
-                    </svg>
-                </td>
-                <td>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-trash" viewBox="0 0 16 16">
-                        <path
-                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                        <path
-                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                    </svg>
-                </td>
-            </tr>
-            }
-        </table>
+        <h1>
+            Tabla de datos de vehículos
+        </h1>
+        <div class="vehicles-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Modelo</th>
+                        <th>Año</th>
+                        <th>Color</th>
+                        <th>Costo</th>
+                        <th>Motor</th>
+                        <th>Puertas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (vehicle of vehicles; track $index) {
+                    <tr class="vehicle-rows">
+                        <td>{{vehicle.model}}</td>
+                        <td>{{vehicle.year}}</td>
+                        <td>{{vehicle.colorVehicle.name}}</td>
+                        <td>{{vehicle.cost}}</td>
+                        <td>{{vehicle.engineVehicle.engineType}}</td>
+                        <td>{{vehicle.doors}}</td>
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                            </svg>
+                        </td>
+                        <td>
+                            <svg (click)="deleteVehicle(vehicle.idVehicle)" xmlns="http://www.w3.org/2000/svg"
+                                width="30" height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                <path
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                            </svg>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </section>
 </div>
+
+@if (isVisibleAddVehicleModal) {
+<div class="add-vehicle-window">
+    <h1>Agregar vehículo</h1>
+
+    <form class="add-vehicle-form" [formGroup]="vehicleForm">
+        <div class="vehicle-inputs">
+            <p>
+                Modelo
+            </p>
+            <input type="text" formControlName="model">
+        </div>
+
+        <div class="vehicle-inputs">
+            <p>
+                Año
+            </p>
+            <input type="text" formControlName="year">
+        </div>
+
+        <div class="vehicle-inputs">
+            <p>
+                Color
+            </p>
+            <input type="text" formControlName="color">
+            <button style="cursor: pointer;" (click)="showColorsModal()">+</button>
+        </div>
+
+        <div class="vehicle-inputs">
+            <p>
+                Costo
+            </p>
+            <input type="text" formControlName="cost">
+        </div>
+
+        <div class="vehicle-inputs">
+            <p>
+                Motor
+            </p>
+            <input type="text" formControlName="engine">
+            <button style="cursor: pointer;" (click)="showEnginesModal()">+</button>
+        </div>
+
+        <div class="vehicle-inputs">
+            <p>
+                # de puertas
+            </p>
+            <input type="text" formControlName="doors">
+        </div>
+    </form>
+
+    <div class="add-buttons">
+        <button (click)="closeVehicleModal()">Cancelar</button>
+        <button (click)="addVehicle()">Agregar</button>
+    </div>
+</div>
+}
+
+@if (isVisibleColorsModal) {
+<div class="add-color-window">
+    <h1>Edición de colores disponibles</h1>
+
+    <form class="add-color-form" [formGroup]="colorForm">
+        <div class="color-inputs">
+            <p>
+                Nombre
+            </p>
+            <input type="text" formControlName="name">
+        </div>
+
+        <div class="color-inputs">
+            <p>
+                Color
+            </p>
+            <input type="color" formControlName="hexCode">
+        </div>
+
+        <div class="color-inputs">
+            <p>
+                Código
+            </p>
+            <p>
+                {{colorForm.value.hexCode}}
+            </p>
+        </div>
+
+        <div class="color-inputs">
+            <button (click)="addColor()">+</button>
+        </div>
+    </form>
+
+    <div class="colors-info">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (color of colors; track $index) {
+                <tr>
+                    <td>{{color.name}}</td>
+                    <td>{{color.hexCode}}</td>
+                    <td>
+                        <input type="color" value="{{color.hexCode}}" disabled>
+                    </td>
+                    <td>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                        </svg>
+                    </td>
+                    <td>
+                        <svg (click)="deleteColor(color.idColor)" xmlns="http://www.w3.org/2000/svg" width="30"
+                            height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                            <path
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                        </svg>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="add-buttons">
+        <button (click)="closeColorsModal()">Finalizar</button>
+    </div>
+</div>
+}
+
+@if (isVisibleEnginesModal) {
+<div class="add-color-window">
+    <h1>Edición de motores disponibles</h1>
+
+    <form class="add-color-form" [formGroup]="engineForm">
+        <div class="color-inputs">
+            <p>
+                Tipo de motor
+            </p>
+            <input type="text" formControlName="engineType">
+        </div>
+
+        <div class="color-inputs">
+            <button (click)="addEngine()">+</button>
+        </div>
+    </form>
+
+    <div class="colors-info">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (engine of engines; track $index) {
+                <tr>
+                    <td>{{engine.engineType}}</td>
+                    <td>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                        </svg>
+                    </td>
+                    <td>
+                        <svg (click)="deleteEngine(engine.idEngine)" xmlns="http://www.w3.org/2000/svg" width="30"
+                            height="30" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path
+                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                            <path
+                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                        </svg>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="add-buttons">
+        <button (click)="closeEnginesModal()">Finalizar</button>
+    </div>
+</div>
+}
