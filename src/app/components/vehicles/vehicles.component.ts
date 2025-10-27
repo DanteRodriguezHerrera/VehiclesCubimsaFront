@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { VehiclesService } from '../../services/vehicles.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ColorsService } from '../../services/colors.service';
 import { EnginesService } from '../../services/engines.service';
 
 @Component({
   selector: 'app-vehicles',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './vehicles.component.html',
   styleUrl: './vehicles.component.scss'
 })
@@ -16,10 +16,12 @@ export class VehiclesComponent implements OnInit {
   constructor(private vehiclesService: VehiclesService, private colorsService: ColorsService, private enginesService: EnginesService) { }
 
   vehicles: any[] = [];
+  idVehicle: string = '';
 
   colors: any[] = [];
 
   engines: any[] = [];
+  idEngine: string = ''
 
   vehicleForm = new FormGroup({
     model: new FormControl(''),
@@ -40,8 +42,15 @@ export class VehiclesComponent implements OnInit {
   })
 
   isVisibleAddVehicleModal: boolean = false;
+  isVisibleEditVehicleModal: boolean = false;
+
   isVisibleColorsModal: boolean = false;
+
   isVisibleEnginesModal: boolean = false;
+  editEngineActive: boolean = false;
+
+  selectedColorId: string = '';
+  selectedEngineId: string = '';
 
   ngOnInit(): void {
 
@@ -74,6 +83,30 @@ export class VehiclesComponent implements OnInit {
     this.isVisibleEnginesModal = false
   }
 
+  showEditVehicleModal(vehicle: any) {
+    this.isVisibleAddVehicleModal = true;
+    this.isVisibleEditVehicleModal = true;
+
+    this.selectedColorId = vehicle.colorVehicle.idColor;
+    this.selectedEngineId = vehicle.engineVehicle.idEngine;
+
+    this.vehicleForm.patchValue({
+      model: vehicle.model,
+      year: vehicle.year,
+      color: vehicle.colorVehicle.idColor,
+      cost: vehicle.cost,
+      engine: vehicle.engineVehicle.idEngine,
+      doors: vehicle.doors
+    })
+
+    this.idVehicle = vehicle.idVehicle;
+  }
+
+  showEditEngine(idEngine: string) {
+    this.editEngineActive = true;
+    this.idEngine = idEngine
+  }
+
   getVehicles() {
     this.vehiclesService.getVehicles().subscribe({
       next: (res: any) => {
@@ -87,13 +120,25 @@ export class VehiclesComponent implements OnInit {
   }
 
   addVehicle() {
-    console.log(this.vehicleForm.value)
-
     this.vehiclesService.addVehicles(this.vehicleForm.value).subscribe({
       next: (res: any) => {
         console.log(res)
         this.getVehicles();
         this.vehicleForm.reset();
+        this.isVisibleAddVehicleModal = false;
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
+  }
+
+  editVehicle() {
+    this.vehiclesService.editVehicles(this.idVehicle, this.vehicleForm.value).subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.getVehicles();
+        this.vehicleForm.reset()
       },
       error: err => {
         console.log(err)
@@ -189,6 +234,16 @@ export class VehiclesComponent implements OnInit {
         console.log(err)
       }
     })
+  }
+
+  selectColor(e: Event) {
+    const value = (e.target as HTMLSelectElement).value;
+    this.vehicleForm.patchValue({ color: value })
+  }
+
+  selectEngine(e: Event) {
+    const value = (e.target as HTMLSelectElement).value;
+    this.vehicleForm.patchValue({ engine: value })
   }
 
 }
