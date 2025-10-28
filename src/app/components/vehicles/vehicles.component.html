@@ -60,9 +60,19 @@
                     <tr class="vehicle-rows">
                         <td>{{vehicle.model}}</td>
                         <td>{{vehicle.year}}</td>
+                        @if (vehicle.colorVehicle == null) {
+                        <td>Sin color asignado</td>
+                        }
+                        @else {
                         <td>{{vehicle.colorVehicle.name}}</td>
+                        }
                         <td>{{vehicle.cost}}</td>
+                        @if (vehicle.engineVehicle == null) {
+                        <td>Sin motor asignado</td>
+                        }
+                        @else {
                         <td>{{vehicle.engineVehicle.engineType}}</td>
+                        }
                         <td>{{vehicle.doors}}</td>
                         <td>
                             <svg (click)="showEditVehicleModal(vehicle)" xmlns="http://www.w3.org/2000/svg" width="30"

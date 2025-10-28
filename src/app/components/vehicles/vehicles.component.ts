@@ -101,15 +101,20 @@ export class VehiclesComponent implements OnInit {
     this.isVisibleAddVehicleModal = true;
     this.isVisibleEditVehicleModal = true;
 
-    this.selectedColorId = vehicle.colorVehicle.idColor;
-    this.selectedEngineId = vehicle.engineVehicle.idEngine;
+    if (vehicle.colorVehicle !== null) {
+      this.selectedColorId = vehicle.colorVehicle.idColor;
+    }
+
+    if (vehicle.engineVehicle !== null) {
+      this.selectedEngineId = vehicle.engineVehicle.idEngine;
+    }
 
     this.vehicleForm.patchValue({
       model: vehicle.model,
       year: vehicle.year,
-      color: vehicle.colorVehicle.idColor,
+      color: this.selectedColorId,
       cost: vehicle.cost,
-      engine: vehicle.engineVehicle.idEngine,
+      engine: this.selectedEngineId,
       doors: vehicle.doors
     })
 
