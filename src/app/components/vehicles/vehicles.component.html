@@ -136,8 +136,8 @@
             <p>
                 Motor
             </p>
-            <select [(ngModel)]="selectedEngineId" (change)="selectEngine($event)"
-                [ngModelOptions]="{standalone: true}">
+            <select style="width: 50%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"
+                [(ngModel)]="selectedEngineId" (change)="selectEngine($event)" [ngModelOptions]="{standalone: true}">
                 <option value="">Seleccione un motor</option>
                 @for (engine of engines; track $index) {
                 <option value={{engine.idEngine}}>{{engine.engineType}}</option>
@@ -153,6 +153,10 @@
             <input type="text" formControlName="doors">
         </div>
     </form>
+
+    @if(isVehiclesFormIncomplete){
+    <p style="width: 100%; text-align: center; margin: 0; color: red;">Favor de llenar todos los campos</p>
+    }
 
     <div class="add-buttons">
         <button (click)="closeVehicleModal()">Cancelar</button>
@@ -198,6 +202,10 @@
             <button (click)="addColor()">+</button>
         </div>
     </form>
+
+    @if(isColorFormIncomplete){
+    <div style="width: 100%; text-align: center; color: red;">Favor de dar un nombre al color</div>
+    }
 
     <div class="colors-info">
         <table>
@@ -260,6 +268,10 @@
             <button (click)="addEngine()">+</button>
         </div>
     </form>
+
+    @if(isEngineFormIncomplete){
+    <div style="width: 100%; text-align: center; color: red;">Favor de dar un nombre al color</div>
+    }
 
     <div class="colors-info">
         <table>

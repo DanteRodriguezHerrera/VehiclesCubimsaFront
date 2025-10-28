@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VehiclesService } from '../../services/vehicles.service';
-import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
 import { ColorsService } from '../../services/colors.service';
 import { EnginesService } from '../../services/engines.service';
 import { Vehicle } from '../../interfaces/vehicle.interface';
@@ -29,30 +29,33 @@ export class VehiclesComponent implements OnInit {
   idEngine: string = ''
 
   vehicleForm = new FormGroup({
-    model: new FormControl(''),
-    year: new FormControl(),
-    color: new FormControl(''),
-    cost: new FormControl(),
-    engine: new FormControl(''),
-    doors: new FormControl('')
+    model: new FormControl('', Validators.required),
+    year: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]),
+    color: new FormControl('', Validators.required),
+    cost: new FormControl('', Validators.required),
+    engine: new FormControl('', Validators.required),
+    doors: new FormControl('', Validators.required)
   })
 
   colorForm = new FormGroup({
-    name: new FormControl(''),
-    hexCode: new FormControl('#000000')
+    name: new FormControl('', Validators.required),
+    hexCode: new FormControl('#000000', Validators.required)
   })
 
   engineForm = new FormGroup({
-    engineType: new FormControl('')
+    engineType: new FormControl('', Validators.required)
   })
 
   isVisibleAddVehicleModal: boolean = false;
   isVisibleEditVehicleModal: boolean = false;
+  isVehiclesFormIncomplete: boolean = false;
 
   isVisibleColorsModal: boolean = false;
+  isColorFormIncomplete: boolean = false;
 
   isVisibleEnginesModal: boolean = false;
   editEngineActive: boolean = false;
+  isEngineFormIncomplete: boolean = false;
 
   selectedColorId: string = '';
   selectedEngineId: string = '';
@@ -65,15 +68,20 @@ export class VehiclesComponent implements OnInit {
   }
 
   showVehicleModal() {
-    this.isVisibleAddVehicleModal = true
+    this.isVisibleAddVehicleModal = true;
+    this.isVehiclesFormIncomplete = false;
+    this.vehicleForm.reset();
   }
 
   closeVehicleModal() {
-    this.isVisibleAddVehicleModal = false
+    this.isVisibleAddVehicleModal = false;
+    this.selectedColorId = '';
+    this.selectedEngineId = '';
   }
 
   showColorsModal() {
-    this.isVisibleColorsModal = true
+    this.isVisibleColorsModal = true;
+    this.isColorFormIncomplete = false;
   }
 
   closeColorsModal() {
@@ -82,6 +90,7 @@ export class VehiclesComponent implements OnInit {
 
   showEnginesModal() {
     this.isVisibleEnginesModal = true
+    this.isEngineFormIncomplete = false;
   }
 
   closeEnginesModal() {
@@ -126,31 +135,48 @@ export class VehiclesComponent implements OnInit {
   }
 
   addVehicle() {
-    this.vehiclesService.addVehicles(this.vehicleForm.value).subscribe({
-      next: (res: any) => {
-        console.log(res)
-        this.getVehicles();
-        this.vehicleForm.reset();
-        this.isVisibleAddVehicleModal = false;
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+
+    if (!this.vehicleForm.valid) {
+      console.log("Favor de llenar todos los campos");
+      this.isVehiclesFormIncomplete = true
+    }
+    else {
+      this.vehiclesService.addVehicles(this.vehicleForm.value).subscribe({
+        next: (res: any) => {
+          console.log(res)
+          this.getVehicles();
+          this.vehicleForm.reset();
+          this.selectedColorId = '';
+          this.selectedEngineId = '';
+          this.isVisibleAddVehicleModal = false;
+        },
+        error: err => {
+          console.log(err)
+        }
+      })
+    }
   }
 
   editVehicle() {
-    this.vehiclesService.editVehicles(this.idVehicle, this.vehicleForm.value).subscribe({
-      next: (res: any) => {
-        console.log(res)
-        this.getVehicles();
-        this.vehicleForm.reset()
-        this.isVisibleAddVehicleModal = false;
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+
+    if (!this.vehicleForm.valid) {
+      console.log("Favor de llenar todos los campos");
+      this.isVehiclesFormIncomplete = true
+    }
+    else {
+      this.vehiclesService.editVehicles(this.idVehicle, this.vehicleForm.value).subscribe({
+        next: (res: any) => {
+          console.log(res)
+          this.getVehicles();
+          this.vehicleForm.reset();
+          this.isVisibleAddVehicleModal = false;
+        },
+        error: err => {
+          console.log(err)
+        }
+      })
+    }
+
   }
 
   deleteVehicle(idVehicle: string) {
@@ -180,18 +206,24 @@ export class VehiclesComponent implements OnInit {
   }
 
   addColor() {
-    console.log(this.colorForm.value)
 
-    this.colorsService.addColor(this.colorForm.value).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.getColors();
-        this.colorForm.reset();
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+    if (!this.colorForm.valid) {
+      this.isColorFormIncomplete = true
+    }
+    else {
+      this.colorsService.addColor(this.colorForm.value).subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.getColors();
+          this.colorForm.reset();
+          this.isColorFormIncomplete = false
+        },
+        error: err => {
+          console.log(err)
+        }
+      })
+    }
+
   }
 
   deleteColor(idColor: string) {
@@ -219,16 +251,23 @@ export class VehiclesComponent implements OnInit {
   }
 
   addEngine() {
-    this.enginesService.addEngine(this.engineForm.value).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.getEngines();
-        this.engineForm.reset()
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+
+    if (!this.engineForm.valid) {
+      this.isEngineFormIncomplete = true;
+    }
+    else {
+      this.enginesService.addEngine(this.engineForm.value).subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.getEngines();
+          this.engineForm.reset()
+          this.isEngineFormIncomplete = false;
+        },
+        error: err => {
+          console.log(err)
+        }
+      })
+    }
   }
 
   deleteEngine(idEngine: string) {
