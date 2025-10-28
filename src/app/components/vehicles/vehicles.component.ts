@@ -3,6 +3,10 @@ import { VehiclesService } from '../../services/vehicles.service';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ColorsService } from '../../services/colors.service';
 import { EnginesService } from '../../services/engines.service';
+import { Vehicle } from '../../interfaces/vehicle.interface';
+import { Color } from '../../interfaces/color.interfaces';
+import { Engine } from '../../interfaces/engine.interface';
+import generatePDF from '../../utils/pdf';
 
 @Component({
   selector: 'app-vehicles',
@@ -15,12 +19,13 @@ export class VehiclesComponent implements OnInit {
 
   constructor(private vehiclesService: VehiclesService, private colorsService: ColorsService, private enginesService: EnginesService) { }
 
-  vehicles: any[] = [];
+  vehicles: Vehicle[] = [];
+  vehiclesFiltered: Vehicle[] = [];
   idVehicle: string = '';
 
-  colors: any[] = [];
+  colors: Color[] = [];
 
-  engines: any[] = [];
+  engines: Engine[] = [];
   idEngine: string = ''
 
   vehicleForm = new FormGroup({
@@ -112,6 +117,7 @@ export class VehiclesComponent implements OnInit {
       next: (res: any) => {
         console.log(res.data)
         this.vehicles = res.data;
+        this.vehiclesFiltered = res.data;
       },
       error: err => {
         console.log(err)
@@ -139,6 +145,7 @@ export class VehiclesComponent implements OnInit {
         console.log(res)
         this.getVehicles();
         this.vehicleForm.reset()
+        this.isVisibleAddVehicleModal = false;
       },
       error: err => {
         console.log(err)
@@ -244,6 +251,47 @@ export class VehiclesComponent implements OnInit {
   selectEngine(e: Event) {
     const value = (e.target as HTMLSelectElement).value;
     this.vehicleForm.patchValue({ engine: value })
+  }
+
+  generatePDF() {
+    generatePDF(this.vehicles, new Date().getTime(), new Date().toLocaleDateString())
+  }
+
+  selectedInput: string = ''
+
+  searchModel: string = '';
+  searchYear: string = '';
+  searchColor: string = '';
+  searchDoors: string = '';
+
+  searchFilter(searchString: string) {
+
+    this.selectedInput = searchString.toString().toLowerCase();
+
+    this.vehiclesFiltered = this.vehicles.filter((vehicleData) => {
+      return (
+        vehicleData.model + ' ' +
+        vehicleData.year + ' ' +
+        vehicleData.colorVehicle.name + ' ' +
+        vehicleData.doors + ' '
+      )
+        .toLowerCase()
+        .includes(this.selectedInput);
+    });
+  }
+
+  minCost: number = 0;
+  maxCost: number = 0;
+
+  searchRangeCostFilter(min: number, max: number) {
+
+    console.log(min)
+
+    this.vehiclesFiltered = this.vehicles.filter((vehicleData) => {
+      return (
+        vehicleData.cost >= min || vehicleData.cost <= max
+      )
+    })
   }
 
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { url1 } from './url';
 
 @Injectable({
   providedIn: 'root'
@@ -8,19 +9,21 @@ export class VehiclesService {
 
   constructor(public http: HttpClient) { }
 
+  baseURL = url1;
+
   getVehicles() {
-    return this.http.get('http://localhost:3000/vehicles');
+    return this.http.get(url1 + 'vehicles');
   }
 
   addVehicles(vehicleInfo: any) {
-    return this.http.post('http://localhost:3000/vehicles', vehicleInfo);
+    return this.http.post(url1 + 'vehicles', vehicleInfo);
   }
 
   editVehicles(idVehicle: string, vehicleInfo: any) {
-    return this.http.patch('http://localhost:3000/vehicles/' + idVehicle, vehicleInfo)
+    return this.http.patch(url1 + 'vehicles/' + idVehicle, vehicleInfo)
   }
 
   deleteVehicles(idVehicle: string) {
-    return this.http.delete('http://localhost:3000/vehicles/' + idVehicle)
+    return this.http.delete(url1 + 'vehicles/' + idVehicle)
   }
 }
